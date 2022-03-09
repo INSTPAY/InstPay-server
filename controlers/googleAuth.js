@@ -1,5 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const jwt = require('jsonwebtoken');
 
 passport.use(
   new GoogleStrategy(
@@ -9,13 +10,16 @@ passport.use(
       callbackURL: 'http://127.0.0.1/auth/google/callback',
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
-      //   User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      // create jwt token
+      const token = jwt.sign(
+        {
+          id: profile.id,
+        },
+        process.env.JWT_CLIENT_SECRET,
+        { expiresIn: '1h' }
+      );
 
-      //     return done(err, user);
-      //   });
-
-      return done('ok');
+      return done({ id: profile.id, token: token });
     }
   )
 );
