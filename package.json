@@ -1,5 +1,50 @@
 {
+
+  "scripts": {
+
+    "start": "nodemon server.js"
+
+  },
+
+  "name": "instpay-server",
+
+  "version": "0.0.1",
+
+  "main": "server.js",
+
   "dependencies": {
-    "express": "^4.17.3"
-  }
+
+    "express": "^4.17.3",
+
+    "jsonwebtoken": "^8.5.1",
+
+    "passport": "^0.5.2",
+
+    "passport-google-oauth20": "^2.0.0"
+
+  },
+
+  "repository": {
+
+    "type": "git",
+
+    "url": "git+https://github.com/INSTPAY/InstPay-server.git"
+
+  },
+
+  "author": "Atanu Debnath",
+
+  "license": "ISC",
+
+  "bugs": {
+
+    "url": "https://github.com/INSTPAY/InstPay-server/issues"
+
+  },
+
+  "homepage": "https://github.com/INSTPAY/InstPay-server#readme",
+
+  "description": ""
+
 }
+
