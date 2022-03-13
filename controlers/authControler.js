@@ -15,10 +15,11 @@ exports.login = async (req, res) => {
       // { expiresIn: '1h' }
     );
 
-    if (user) res.status(200).json({ account: user.account, token: token });
-    else res.status(400).json({ message: 'account not found' });
+    res.status(200).json({ account: user.account, token: token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res
+      .status(400)
+      .json({ message: 'check account and pin', error: error.message });
   }
 };
 
@@ -47,6 +48,9 @@ exports.signup = async (req, res) => {
       .status(200)
       .json({ account: newuser.account, pin: newuser.pin, token: token });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({
+      message: 'you got some error, try again!',
+      error: error.message,
+    });
   }
 };
