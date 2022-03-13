@@ -6,7 +6,7 @@ exports.account = async (req, res) => {
     const user = await User.findOne({ account: account });
 
     if (user) res.status(200).json(user);
-    else res.status(400).json({ message: 'account not found' });
+    else res.status(404).json({ message: 'account not found' });
   } catch (error) {
     res.status(200).json({ error: error.message });
   }
