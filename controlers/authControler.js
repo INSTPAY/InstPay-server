@@ -18,7 +18,7 @@ exports.login = async (req, res) => {
     if (user) res.status(200).json({ account: user.account, token: token });
     else res.status(400).json({ message: 'account not found' });
   } catch (error) {
-    res.status(200).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -47,6 +47,6 @@ exports.signup = async (req, res) => {
       .status(200)
       .json({ account: newuser.account, pin: newuser.pin, token: token });
   } catch (error) {
-    res.status(501).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
