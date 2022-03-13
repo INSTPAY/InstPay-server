@@ -7,13 +7,13 @@ router.post('/send', (req, res) => {
 });
 
 // All transactions
-router.post('/', (req, res) => {
+router.post('/transactions', (req, res) => {
   transaction.transactions(req, res);
 });
 
-// transactionById
-router.post('/:id', (req, res) => {
-  transaction.transactionById(req, res);
+// transaction
+router.post('/transaction', (req, res) => {
+  transaction.transaction(req, res);
 });
 
 module.exports = router;
