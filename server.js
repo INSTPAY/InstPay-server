@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const connectdb = require('./database');
 const env = require('dotenv');
 const app = express();
@@ -13,6 +14,14 @@ connectdb();
 // Midelewears
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//cors
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH'],
+  })
+);
 
 // routes
 app.get('/', (req, res) => {
