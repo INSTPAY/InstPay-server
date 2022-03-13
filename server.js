@@ -35,7 +35,7 @@ app.use('/payment', require('./routes/transactionRoutes'));
 
 app.use('/upload', require('./routes/uploadRoutes'));
 
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 // Listening port
 app.listen(8080);
