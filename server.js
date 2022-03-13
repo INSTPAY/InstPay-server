@@ -8,6 +8,7 @@ const app = express();
 
 // env config
 env.config();
+
 // database config
 connectdb();
 
@@ -24,15 +25,17 @@ app.use(
 );
 
 // routes
-app.get('/', (req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
+app.get('/', (req, res) => res.status(200).json({ status: 'ok' }));
 
 app.use('/auth', require('./routes/authRoutes'));
 
 app.use('/account', require('./routes/accountRoutes'));
 
 app.use('/payment', require('./routes/transactionRoutes'));
+
+app.use('/upload', require('./routes/uploadRoutes'));
+
+app.use('/uploads', express.static('uploads'));
 
 // Listening port
 app.listen(8080);
