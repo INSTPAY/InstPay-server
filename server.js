@@ -25,16 +25,5 @@ app.use('/account', require('./routes/accountRoutes'));
 
 app.use('/payment', require('./routes/transactionRoutes'));
 
-// const sendMail = require('./services/sendEmail');
-// const sendSms = require('./services/sendSms');
-
-// app.get('/mail', async (req, res) => {
-//   res.status(200).json(await sendMail('playatanu@gmail.com', 'Hi'));
-// });
-
-// app.get('/sms', async (req, res) => {
-//   res.status(200).json(await sendSms('6296843271', 'Hi'));
-// });
-
 // Listening port
-app.listen(80);
+app.listen(8080);
