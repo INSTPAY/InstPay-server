@@ -50,9 +50,9 @@ exports.transactions = async (req, res) => {
 };
 
 exports.transaction = async (req, res) => {
-  const { _id } = req.body;
+  const { id } = req.body;
   try {
-    const trans = await Transaction.findById(_id);
+    const trans = await Transaction.findById(id);
 
     if (trans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });
