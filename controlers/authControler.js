@@ -43,7 +43,7 @@ exports.signup = async (req, res) => {
   user._id = user.account;
 
   try {
-    user.pin = await bcrypt.hash(user.pin, process.env.SALT_ROUND);
+    user.pin = await bcrypt.hash(user.pin, parseInt(process.env.SALT_ROUND));
   } catch (error) {
     res.status(500).json({
       message: 'you got some error, try again!',
