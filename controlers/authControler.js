@@ -3,31 +3,35 @@ const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 
 exports.login = async (req, res) => {
+  const { account, pin } = req.body;
+
+  var user;
+  var isCorrectPin;
+
+  //get user
   try {
-    const { account, pin } = req.body;
-
-    //get user
-    const user = await User.findById(account);
-
-    //chaking user pin
-    const isCorrectPin = await bcrypt.compare(pin, user.pin);
-
-    if (isCorrectPin) {
-      // create token
-      const token = jwt.sign(
-        {
-          account: user.account,
-        },
-        process.env.JWT_CLIENT_SECRET
-        // { expiresIn: '1h' }
-      );
-      res.status(200).json({ account: user.account, token: token });
-    } else
-      res.status(400).json({ message: 'check your pin', error: error.message });
+    user = await User.findById(account);
+    if (!user) res.status(400).json({ message: 'account not found' });
   } catch (error) {
-    res
-      .status(400)
-      .json({ message: 'account not found', error: error.message });
+    res.status(500).json({ message: error.message });
+  }
+
+  //pin chake hash
+  if (user)
+    try {
+      isCorrectPin = await bcrypt.compare(pin, user.pin);
+      if (!isCorrectPin) res.status(400).json({ message: 'invalid pin' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+
+  // create token
+  if (isCorrectPin) {
+    const token = jwt.sign(
+      { account: user.account },
+      process.env.JWT_CLIENT_SECRET
+    );
+    res.status(200).json({ account: user.account, token: token });
   }
 };
 
@@ -42,7 +46,6 @@ exports.signup = async (req, res) => {
     user.pin = await bcrypt.hash(user.pin, parseInt(process.env.SALT_ROUND));
   } catch (error) {
     res.status(500).json({
-      message: 'you got some error, try again!',
       error: error.message,
     });
   }
@@ -62,8 +65,7 @@ exports.signup = async (req, res) => {
 
     res.status(200).json({ account: newuser.account, token: token });
   } catch (error) {
-    res.status(400).json({
-      message: 'you got some error, try again!',
+    res.status(500).json({
       error: error.message,
     });
   }
