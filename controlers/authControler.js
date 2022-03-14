@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 exports.login = async (req, res) => {
   try {
@@ -38,7 +37,7 @@ exports.signup = async (req, res) => {
   //create account id
   user.account = Date.now();
   user._id = user.account;
-  user.pin = await bcrypt.hash(user.pin, saltRounds);
+  user.pin = await bcrypt.hash(user.pin, process.env.SALT_ROUND);
 
   // create token
   const token = jwt.sign(
