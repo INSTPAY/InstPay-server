@@ -52,9 +52,7 @@ exports.signup = async (req, res) => {
   try {
     const newuser = await user.save();
 
-    res
-      .status(200)
-      .json({ account: newuser.account, pin: newuser.pin, token: token });
+    res.status(200).json({ account: newuser.account, token: token });
   } catch (error) {
     res.status(400).json({
       message: 'you got some error, try again!',
