@@ -1,18 +1,18 @@
 const router = require('express').Router();
 const transaction = require('../controlers/transactionControler');
-
+const tokenAuth = require('../middlewares/tokenAuth');
 //send money
-router.post('/send', (req, res) => {
+router.post('/send', tokenAuth, (req, res) => {
   transaction.pay(req, res);
 });
 
 // All transactions
-router.post('/transactions', (req, res) => {
+router.post('/transactions', tokenAuth, (req, res) => {
   transaction.transactions(req, res);
 });
 
 // transaction
-router.post('/transaction', (req, res) => {
+router.post('/transaction', tokenAuth, (req, res) => {
   transaction.transaction(req, res);
 });
 
