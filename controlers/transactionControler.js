@@ -33,7 +33,7 @@ exports.pay = async (req, res) => {
     if (newtrans) res.status(200).json(newtrans);
     else res.status(400).json({ message: 'transactions not found' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -45,7 +45,7 @@ exports.transactions = async (req, res) => {
     if (trans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transactions not found' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -57,6 +57,6 @@ exports.transaction = async (req, res) => {
     if (trans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 };

@@ -4,7 +4,9 @@ const transactionSceama = mongoose.Schema(
   {
     to: { type: String, require: true },
     from: { type: String, require: true },
-    balance: { type: Number, default: 1000 },
+    balance: { type: Number, require: true },
+    type: { type: Number, require: true },
+    method: { type: Number, require: true },
   },
   { timestamps: true }
 );
