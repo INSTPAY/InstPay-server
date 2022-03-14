@@ -9,8 +9,12 @@ exports.login = async (req, res) => {
     //get user
     const user = await User.findById(account);
 
-    //chaking user pin
-    const isCorrectPin = await bcrypt.compare(user.pin, pin);
+    try {
+      //chaking user pin
+      const isCorrectPin = await bcrypt.compare(user.pin, pin);
+    } catch (error) {
+      res.status(400).json({ message: 'check your pin', error: error.message });
+    }
 
     if (isCorrectPin) {
       // create token
@@ -37,7 +41,15 @@ exports.signup = async (req, res) => {
   //create account id
   user.account = Date.now();
   user._id = user.account;
-  user.pin = await bcrypt.hash(user.pin, process.env.SALT_ROUND);
+
+  try {
+    user.pin = await bcrypt.hash(user.pin, process.env.SALT_ROUND);
+  } catch (error) {
+    res.status(500).json({
+      message: 'you got some error, try again!',
+      error: error.message,
+    });
+  }
 
   // create token
   const token = jwt.sign(
