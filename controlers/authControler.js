@@ -9,27 +9,21 @@ exports.login = async (req, res) => {
     //get user
     const user = await User.findById(account);
 
-    try {
-      //chaking user pin
-      const isCorrectPin = await bcrypt.compare(user.pin, pin);
+    //chaking user pin
+    const isCorrectPin = await bcrypt.compare(pin, user.pin);
 
-      if (isCorrectPin) {
-        // create token
-        const token = jwt.sign(
-          {
-            account: user.account,
-          },
-          process.env.JWT_CLIENT_SECRET
-          // { expiresIn: '1h' }
-        );
-        res.status(200).json({ account: user.account, token: token });
-      } else
-        res
-          .status(400)
-          .json({ message: 'check your pin', error: error.message });
-    } catch (error) {
+    if (isCorrectPin) {
+      // create token
+      const token = jwt.sign(
+        {
+          account: user.account,
+        },
+        process.env.JWT_CLIENT_SECRET
+        // { expiresIn: '1h' }
+      );
+      res.status(200).json({ account: user.account, token: token });
+    } else
       res.status(400).json({ message: 'check your pin', error: error.message });
-    }
   } catch (error) {
     res
       .status(400)
