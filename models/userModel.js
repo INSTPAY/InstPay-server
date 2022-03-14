@@ -13,7 +13,7 @@ const userSceama = mongoose.Schema(
     phone: { type: String, require: true },
     account: { type: String, require: true },
     pin: { type: String, require: true },
-    balance: { type: String, default: 1000 },
+    balance: { type: Number, default: 1000 },
   },
   { timestamps: true }
 );
