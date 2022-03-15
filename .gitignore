@@ -3,3 +3,5 @@ node_modules
 uploads
 services/paytm.js
 test.js
+routes/accountRoutes.js
+.gitignore
