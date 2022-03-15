@@ -31,6 +31,10 @@ app.use('/auth', require('./routes/authRoutes'));
 
 app.use('/account', require('./routes/accountRoutes'));
 
+app.use('/forget', require('./routes/forgetRoutes'));
+
+app.use('/verify', require('./routes/verifyRouters'));
+
 app.use('/payment', require('./routes/transactionRoutes'));
 
 app.use('/upload', require('./routes/uploadRoutes'));
