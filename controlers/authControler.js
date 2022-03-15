@@ -37,6 +37,7 @@ exports.login = async (req, res) => {
 
 exports.signup = async (req, res) => {
   const user = User(req.body);
+  var resUser;
 
   //create account id
   user.account = Date.now();
@@ -59,14 +60,24 @@ exports.signup = async (req, res) => {
     // { expiresIn: '1h' }
   );
 
-  //save user data database
+  //chake is email alredy exits
   try {
-    const newuser = await user.save();
-
-    res.status(200).json({ account: newuser.account, token: token });
+    resUser = await User.findOne({ email: user.email });
+    if (resUser)
+      res.status(400).json({ message: 'email have a another account' });
   } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    });
+    res.status(500).json({ message: error.message });
   }
+
+  //save user data database
+  if (!resUser)
+    try {
+      const newuser = await user.save();
+
+      res.status(200).json({ account: newuser.account, token: token });
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
+    }
 };
