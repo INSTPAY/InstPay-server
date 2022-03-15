@@ -5,6 +5,7 @@ const userSceama = mongoose.Schema(
     _id: { type: String, require: true },
     name: { type: String, require: true },
     email: { type: String, require: true },
+    verified: { type: Boolean, default: false },
     aadhaar: { type: String, default: '' },
     pan: { type: String, default: '' },
     photo: { type: String, default: '' },
