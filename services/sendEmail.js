@@ -8,12 +8,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendMail = async (to, message) => {
+const sendMail = async (to, subject, message) => {
   var mailOptions = {
     from: process.env.GMAIL_ACCOUNT,
     to: to,
-    subject: 'Sending Email from InstPay',
-    text: message,
+    subject: subject,
+    html: message,
   };
 
   try {
