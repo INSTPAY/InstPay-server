@@ -2,12 +2,12 @@ const Transaction = require('../models/transactionModel');
 const User = require('../models/userModel');
 
 exports.pay = async (req, res) => {
-  const { account, to, balance } = req.body;
+  const { account, to, amount } = req.body;
   try {
     // form Account
     const fromAccount = await User.findOne({ account: account });
     const fromBalance = fromAccount.balance;
-    const fromUpdatedBalance = parseInt(fromBalance) - parseInt(balance);
+    const fromUpdatedBalance = parseInt(fromBalance) - parseInt(amount);
     await User.findOneAndUpdate(
       { account: fromAccount },
       { balance: fromUpdatedBalance }
@@ -16,7 +16,7 @@ exports.pay = async (req, res) => {
     // to Account
     const toAccount = await User.findOne({ account: to });
     const toBalance = toAccount.balance;
-    const toUpdatedBalance = parseInt(toBalance) + parseInt(balance);
+    const toUpdatedBalance = parseInt(toBalance) + parseInt(amount);
     await User.findOneAndUpdate(
       { account: toAccount },
       { balance: toUpdatedBalance }
@@ -25,7 +25,7 @@ exports.pay = async (req, res) => {
     const trans = Transaction({
       to: to,
       from: account,
-      balance: balance,
+      amount: amount,
     });
     // save transaction
     const newtrans = await trans.save();
