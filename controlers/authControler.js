@@ -41,7 +41,6 @@ exports.signup = async (req, res) => {
 
   //create account id
   user.account = Date.now();
-  user._id = user.account;
 
   try {
     user.pin = await bcrypt.hash(user.pin, parseInt(process.env.SALT_ROUND));
