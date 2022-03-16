@@ -3,6 +3,11 @@ const tokenAuth = require('../middlewares/tokenAuth');
 
 const account = require('../controlers/accountControler');
 
+//get receiver account
+router.post('/receiver', tokenAuth, (req, res) => {
+  account.receiverAccount(req, res);
+});
+
 //get account
 router.post('/', tokenAuth, (req, res) => {
   account.account(req, res);
