@@ -31,3 +31,15 @@ exports.delete = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.receiverAccount = async (req, res) => {
+  try {
+    const { receiver } = req.body;
+    const user = await User.findOne({ account: receiver });
+
+    if (user) res.status(200).json(user);
+    else res.status(404).json({ message: 'account not found' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
