@@ -15,7 +15,6 @@ exports.pay = async (req, res) => {
       sender: account,
       recever: to,
     });
-    console.log('alredyTransWithRes ' + alredyTransWithRes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -28,19 +27,17 @@ exports.pay = async (req, res) => {
         recever: to,
       });
       const e = await newtransWith.save();
-      console.log('e ' + e);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
 
-  console.log('done 1');
   try {
     // form Account
     const fromAccount = await User.findOne({ account: account });
     const fromBalance = fromAccount.balance;
     const fromUpdatedBalance = fromBalance - amount;
-    await User.findOneAndUpdate(
-      { account: fromAccount },
+    const upFrom = await User.findOneAndUpdate(
+      { account: account },
       { balance: fromUpdatedBalance }
     );
 
@@ -48,8 +45,8 @@ exports.pay = async (req, res) => {
     const toAccount = await User.findOne({ account: to });
     const toBalance = toAccount.balance;
     const toUpdatedBalance = toBalance + amount;
-    await User.findOneAndUpdate(
-      { account: toAccount },
+    const upTo = await User.findOneAndUpdate(
+      { account: to },
       { balance: toUpdatedBalance }
     );
 
@@ -91,7 +88,6 @@ exports.pay = async (req, res) => {
       );
 
       if (tempUser) res.status(200).json(newtransRes);
-      console.log('ok 3');
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -103,7 +99,9 @@ exports.transactions = async (req, res) => {
     const trans = await Transaction.find({ from: account });
     const trans2 = await Transaction.find({ to: account });
 
-    if (trans) res.status(200).json([trans, trans2]);
+    const newtrans = [...trans, ...trans2];
+
+    if (trans) res.status(200).json(newtrans);
     else res.status(400).json({ message: 'transactions not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
