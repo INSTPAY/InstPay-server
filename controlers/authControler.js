@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
 
   //get user
   try {
-    user = await User.findById(account);
+    user = await User.findOne({ account: account });
     if (!user) res.status(400).json({ message: 'account not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
