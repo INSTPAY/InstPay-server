@@ -14,6 +14,7 @@ const userSceama = mongoose.Schema(
     account: { type: String, require: true },
     pin: { type: String, require: true },
     balance: { type: Number, default: 1000 },
+    transactions: { type: Array, default: [] },
   },
   { timestamps: true }
 );
