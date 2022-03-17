@@ -70,6 +70,17 @@ exports.transaction = async (req, res) => {
   }
 };
 
+exports.payessTransaction = async (req, res) => {
+  const { account, to } = req.body;
+
+  try {
+    const trans = await Transaction.find({ from: account, to: to });
+    res.status(200).json(trans);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.payees = async (req, res) => {
   const { account } = req.body;
   try {
