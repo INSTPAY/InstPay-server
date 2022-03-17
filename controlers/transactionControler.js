@@ -1,5 +1,5 @@
 const Transaction = require('../models/transactionModel');
-const TransactionWith = require('../models/transctionWithModel');
+const Payees = require('../models/payeesModel');
 const User = require('../models/userModel');
 
 exports.pay = async (req, res) => {
@@ -11,7 +11,7 @@ exports.pay = async (req, res) => {
 
   // chake transcton With Alredy avalable
   try {
-    alredyTransWithRes = await TransactionWith.findOne({
+    alredyTransWithRes = await Payees.findOne({
       sender: account,
       recever: to,
     });
@@ -22,7 +22,7 @@ exports.pay = async (req, res) => {
   // transcton With not  avalable crerate new transcton With Model
   if (!alredyTransWithRes)
     try {
-      const newtransWith = new TransactionWith({
+      const newtransWith = new Payees({
         sender: account,
         recever: to,
       });
@@ -36,6 +36,8 @@ exports.pay = async (req, res) => {
     const fromAccount = await User.findOne({ account: account });
     const fromBalance = fromAccount.balance;
     const fromUpdatedBalance = fromBalance - amount;
+
+    //saving new amount into From Account
     const upFrom = await User.findOneAndUpdate(
       { account: account },
       { balance: fromUpdatedBalance }
@@ -45,6 +47,8 @@ exports.pay = async (req, res) => {
     const toAccount = await User.findOne({ account: to });
     const toBalance = toAccount.balance;
     const toUpdatedBalance = toBalance + amount;
+
+    //saving new amount into to Account
     const upTo = await User.findOneAndUpdate(
       { account: to },
       { balance: toUpdatedBalance }
@@ -61,21 +65,23 @@ exports.pay = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 
+  // create Transaction With
   if (newtransRes)
     try {
-      transWRes = await TransactionWith.findOneAndUpdate(
+      transWRes = await Payees.findOneAndUpdate(
         {
           sender: account,
           recever: to,
         },
         {
-          $addToSet: { transactions: newtransRes._id.toString() },
+          $addToSet: { payees: newtransRes._id.toString() },
         }
       );
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
 
+  // update User Account Transaction With List
   if (transWRes)
     try {
       tempUser = await User.findOneAndUpdate(
@@ -83,7 +89,7 @@ exports.pay = async (req, res) => {
           account: account,
         },
         {
-          $addToSet: { transactions: transWRes._id },
+          $addToSet: { payees: transWRes._id },
         }
       );
 
@@ -96,8 +102,8 @@ exports.pay = async (req, res) => {
 exports.transactions = async (req, res) => {
   const { account } = req.body;
   try {
-    const trans = await Transaction.find({ from: account });
-    const trans2 = await Transaction.find({ to: account });
+    const trans = await Payees.find({ from: account });
+    const trans2 = await Payees.find({ to: account });
 
     const newtrans = [...trans, ...trans2];
 
@@ -120,25 +126,25 @@ exports.transaction = async (req, res) => {
   }
 };
 
-exports.transactionWith = async (req, res) => {
+exports.payees = async (req, res) => {
   const { account, recever } = req.body;
   try {
-    const trans = await TransactionWith.findOne({
+    const trans = await Payees.findOne({
       sender: account,
       recever: recever,
     });
 
-    if (trans) res.status(200).json(trans.transactions);
+    if (trans) res.status(200).json(trans.payees);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-exports.transactionWithId = async (req, res) => {
+exports.payee = async (req, res) => {
   const { _id } = req.body;
   try {
-    const trans = await TransactionWith.findById(_id);
+    const trans = await Payees.findById(_id);
 
     if (trans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });

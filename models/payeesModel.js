@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const transactionWithSceama = mongoose.Schema(
+const payeesSceama = mongoose.Schema(
   {
     sender: { type: String, require: true },
     recever: { type: String, require: true },
@@ -9,4 +9,4 @@ const transactionWithSceama = mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('TransactionWith', transactionWithSceama);
+module.exports = mongoose.model('Payees', payeesSceama);

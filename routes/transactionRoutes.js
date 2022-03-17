@@ -17,13 +17,13 @@ router.post('/transaction', tokenAuth, (req, res) => {
 });
 
 // transaction with
-router.post('/transactions/with', tokenAuth, (req, res) => {
-  transaction.transactionWith(req, res);
+router.post('/payees', tokenAuth, (req, res) => {
+  transaction.payees(req, res);
 });
 
 // transaction with
-router.post('/transaction/with', tokenAuth, (req, res) => {
-  transaction.transactionWithId(req, res);
+router.post('/payee', tokenAuth, (req, res) => {
+  transaction.payee(req, res);
 });
 
 module.exports = router;
