@@ -16,14 +16,9 @@ router.post('/transaction', tokenAuth, (req, res) => {
   transaction.transaction(req, res);
 });
 
-// transaction with
+// transaction payees
 router.post('/payees', tokenAuth, (req, res) => {
   transaction.payees(req, res);
-});
-
-// transaction with
-router.post('/payee', tokenAuth, (req, res) => {
-  transaction.payee(req, res);
 });
 
 module.exports = router;

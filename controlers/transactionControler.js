@@ -127,26 +127,37 @@ exports.transaction = async (req, res) => {
 };
 
 exports.payees = async (req, res) => {
-  const { account, recever } = req.body;
+  const { account } = req.body;
   try {
-    const trans = await Payees.findOne({
-      sender: account,
-      recever: recever,
+    const trans = await Transaction.find({
+      from: account,
     });
 
-    if (trans) res.status(200).json(trans.payees);
-    else res.status(400).json({ message: 'transaction not found' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    var tempToList = [];
 
-exports.payee = async (req, res) => {
-  const { _id } = req.body;
-  try {
-    const trans = await Payees.findById(_id);
+    for (let index = 0; index < trans.length; index++) {
+      tempToList[index] = trans[index].to;
+    }
 
-    if (trans) res.status(200).json(trans);
+    console.log(tempToList);
+
+    let to = [...new Set(tempToList)];
+
+    console.log(to);
+
+    var finalUserList = [];
+
+    for (let index = 0; index < to.length; index++) {
+      var transs = await User.findOne({
+        account: to[index],
+      });
+
+      finalUserList[index] = transs;
+    }
+
+    console.log(finalUserList);
+
+    if (trans) res.status(200).json(finalUserList);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
