@@ -1,35 +1,8 @@
 const Transaction = require('../models/transactionModel');
-const Payees = require('../models/payeesModel');
 const User = require('../models/userModel');
 
 exports.pay = async (req, res) => {
   const { account, to, amount } = req.body;
-
-  var alredyTransWithRes;
-  var newtransRes;
-  var transWRes;
-
-  // chake transcton With Alredy avalable
-  try {
-    alredyTransWithRes = await Payees.findOne({
-      sender: account,
-      recever: to,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-
-  // transcton With not  avalable crerate new transcton With Model
-  if (!alredyTransWithRes)
-    try {
-      const newtransWith = new Payees({
-        sender: account,
-        recever: to,
-      });
-      const e = await newtransWith.save();
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
 
   try {
     // form Account
@@ -54,56 +27,27 @@ exports.pay = async (req, res) => {
       { balance: toUpdatedBalance }
     );
 
+    //create transaction
     const trans = Transaction({
       to: to,
       from: account,
       amount: amount,
     });
+
     // save transaction
     newtransRes = await trans.save();
+
+    res.status(200).json(newtransRes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
-  // create Transaction With
-  if (newtransRes)
-    try {
-      transWRes = await Payees.findOneAndUpdate(
-        {
-          sender: account,
-          recever: to,
-        },
-        {
-          $addToSet: { payees: newtransRes._id.toString() },
-        }
-      );
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-
-  // update User Account Transaction With List
-  if (transWRes)
-    try {
-      tempUser = await User.findOneAndUpdate(
-        {
-          account: account,
-        },
-        {
-          $addToSet: { payees: transWRes._id },
-        }
-      );
-
-      if (tempUser) res.status(200).json(newtransRes);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
 };
 
 exports.transactions = async (req, res) => {
   const { account } = req.body;
   try {
-    const trans = await Payees.find({ from: account });
-    const trans2 = await Payees.find({ to: account });
+    const trans = await Transaction.find({ from: account });
+    const trans2 = await Transaction.find({ to: account });
 
     const newtrans = [...trans, ...trans2];
 
