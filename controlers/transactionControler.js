@@ -27,8 +27,8 @@ exports.pay = async (req, res) => {
       { balance: toUpdatedBalance }
     );
 
-    //create transaction
-    const trans = Transaction({
+    //create  new transaction
+    const trans = new Transaction({
       to: to,
       from: account,
       amount: amount,
@@ -77,18 +77,17 @@ exports.payees = async (req, res) => {
       from: account,
     });
 
+    // temp list where store only [to] accounts number
     var tempToList = [];
 
     for (let index = 0; index < trans.length; index++) {
       tempToList[index] = trans[index].to;
     }
 
-    console.log(tempToList);
-
+    // set onnly unicq to accounts
     let to = [...new Set(tempToList)];
 
-    console.log(to);
-
+    //  finalUserList save the [to] accounts
     var finalUserList = [];
 
     for (let index = 0; index < to.length; index++) {
@@ -98,8 +97,6 @@ exports.payees = async (req, res) => {
 
       finalUserList[index] = transs;
     }
-
-    console.log(finalUserList);
 
     if (trans) res.status(200).json(finalUserList);
     else res.status(400).json({ message: 'transaction not found' });
