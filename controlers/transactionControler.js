@@ -76,10 +76,21 @@ exports.payessTransaction = async (req, res) => {
   try {
     const trans = await Transaction.find({
       $and: [
-        { from: account, to: payee },
-        { from: payee, to: account },
+        {
+          from: { $gt: account },
+          from: { $lte: payee },
+          to: { $gt: account },
+          to: { $lte: payee },
+        },
       ],
     });
+
+    //=======================
+    // { from: account, to: payee },
+
+    // ///{ from: payee, to: account },
+
+    //==========================
 
     // const newtrans = [...trans, ...trans2];
 
