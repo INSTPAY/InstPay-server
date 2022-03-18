@@ -74,9 +74,12 @@ exports.payessTransaction = async (req, res) => {
   const { account, payee } = req.body;
 
   try {
-    const trans = await Transaction.find({ from: account, to: payee });
-
-    const trans2 = await Transaction.find({ from: payee, to: account });
+    const trans = await Transaction.find({
+      $and: [
+        { from: account, to: payee },
+        { from: payee, to: account },
+      ],
+    });
 
     const newtrans = [...trans, ...trans2];
 
@@ -86,7 +89,7 @@ exports.payessTransaction = async (req, res) => {
     });
 
     console.log(byDate);
-    if (newtrans) res.status(200).json(byDate);
+    if (newtrans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
