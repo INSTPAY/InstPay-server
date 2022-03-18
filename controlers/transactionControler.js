@@ -88,7 +88,6 @@ exports.payessTransaction = async (req, res) => {
       return a.createdAt - b.createdAt;
     });
 
-    console.log(byDate);
     if (newtrans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
