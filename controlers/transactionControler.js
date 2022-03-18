@@ -81,14 +81,14 @@ exports.payessTransaction = async (req, res) => {
       ],
     });
 
-    const newtrans = [...trans, ...trans2];
+    // const newtrans = [...trans, ...trans2];
 
-    var byDate = newtrans.slice(0);
-    byDate.sort(function (a, b) {
-      return a.createdAt - b.createdAt;
-    });
+    // var byDate = newtrans.slice(0);
+    // byDate.sort(function (a, b) {
+    //   return a.createdAt - b.createdAt;
+    // });
 
-    if (newtrans) res.status(200).json(trans);
+    if (trans) res.status(200).json(trans);
     else res.status(400).json({ message: 'transaction not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
