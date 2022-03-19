@@ -51,7 +51,7 @@ exports.transactions = async (req, res) => {
     const newtrans = [...trans, ...trans2];
 
     var byDate = newtrans.slice(0);
-    byDate.sort(function (b, a) {
+    byDate.sort(function (a, b) {
       return b.createdAt - a.createdAt;
     });
 
