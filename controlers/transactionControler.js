@@ -2,7 +2,7 @@ const Transaction = require('../models/transactionModel');
 const User = require('../models/userModel');
 
 exports.pay = async (req, res) => {
-  const { account, to, amount } = req.body;
+  const { account, to, amount, note } = req.body;
 
   try {
     // form Account
@@ -32,6 +32,7 @@ exports.pay = async (req, res) => {
       to: to,
       from: account,
       amount: amount,
+      note: note,
     });
 
     // save transaction
