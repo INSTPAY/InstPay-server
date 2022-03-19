@@ -50,7 +50,12 @@ exports.transactions = async (req, res) => {
     const trans2 = await Transaction.find({ from: account });
     const newtrans = [...trans, ...trans2];
 
-    if (newtrans) res.status(200).json(newtrans);
+    var byDate = newtrans.slice(0);
+    byDate.sort(function (a, b) {
+      return a.createdAt - b.createdAt;
+    });
+
+    if (byDate) res.status(200).json(byDate);
     else res.status(400).json({ message: 'transactions not found' });
   } catch (error) {
     res.status(500).json({ message: error.message });
