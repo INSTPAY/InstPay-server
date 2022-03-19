@@ -46,8 +46,8 @@ exports.pay = async (req, res) => {
 exports.transactions = async (req, res) => {
   const { account } = req.body;
   try {
-    const trans = await Transaction.find({ to: account, from: payee });
-    const trans2 = await Transaction.find({ to: payee, from: account });
+    const trans = await Transaction.find({ to: account });
+    const trans2 = await Transaction.find({ from: account });
     const newtrans = [...trans, ...trans2];
 
     if (newtrans) res.status(200).json(newtrans);
