@@ -4,51 +4,47 @@ const Otp = require('../models/otpModel');
 const Email = require('../models/emailModel');
 
 exports.emailVerify = async (req, res) => {
-  const user = req.body;
-  var resUser;
-  var resEmail;
+  const { email } = req.body;
+
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  const newEmailModel = new Email({
+    email: email,
+    otp: otp,
+  });
+
+  var mailRes;
+
+  mailRes = await sendMail(
+    newEmailModel.email,
+    'InstPay OTP number',
+    'Hello, <br>' +
+      'Your otp is <h1><b>' +
+      newEmailModel.otp +
+      '</h1></b><br><br><br>Thanks, Regards  <br>InstPay Team'
+  );
+
+  if (mailRes)
+    try {
+      const resEmail = await newEmailModel.save();
+      if (resEmail) res.status(200).json({ message: 'email sent' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+};
+
+exports.emailVerifyByOtp = async (req, res) => {
+  const { otp, email } = req.body;
 
   try {
-    resUser = await User.findOne({ email: user.email });
-    if (!resUser) res.status(400).json({ message: 'account not found' });
+    const resEmail = await Email.findOne({ email: email, otp: otp });
+
+    if (resEmail)
+      res.status(200).json({ message: 'email verified', status: true });
+    else res.status(400).json({ message: 'wrong otp', status: false });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
-  if (resUser)
-    try {
-      const newEmail = new Email({ email: resUser.email });
-      resEmail = await newEmail.save();
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-
-  if (resEmail)
-    try {
-      var verifyUrl =
-        req.protocol +
-        '://' +
-        req.get('host') +
-        req.originalUrl +
-        '/' +
-        resEmail._id;
-
-      const mailRes = await sendMail(
-        resUser.email,
-        'InstPay OTP number',
-        'Hello, <br>' +
-          ', your click  <b>' +
-          verifyUrl +
-          '</b><br><br><br>Thanks, Regards  <br>InstPay Team'
-      );
-      res.status(200).json({
-        message: 'email sent',
-        url: verifyUrl,
-        //mail: mailRes.response,
-      });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
 };
 
 exports.pinVerify = async (req, res) => {
@@ -79,28 +75,28 @@ exports.pinVerify = async (req, res) => {
   if (resUser) res.status(200).json({ message: 'pin changed successfully' });
 };
 
-exports.emailVerifyID = async (req, res) => {
-  const { id } = req.params;
-  var resEmail;
-  var resUser;
+// exports.emailVerifyID = async (req, res) => {
+//   const { id } = req.params;
+//   var resEmail;
+//   var resUser;
 
-  try {
-    resEmail = await Email.findById(id);
-    if (!resEmail) res.status(400).json({ message: 'error' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+//   try {
+//     resEmail = await Email.findById(id);
+//     if (!resEmail) res.status(400).json({ message: 'error' });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
 
-  if (resEmail)
-    try {
-      resUser = await User.findOneAndUpdate(
-        { email: resEmail.email },
-        { verified: true }
-      );
+//   if (resEmail)
+//     try {
+//       resUser = await User.findOneAndUpdate(
+//         { email: resEmail.email },
+//         { verified: true }
+//       );
 
-      if (resUser)
-        res.status(200).json({ message: 'email verified successfully' });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-};
+//       if (resUser)
+//         res.status(200).json({ message: 'email verified successfully' });
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+// };
