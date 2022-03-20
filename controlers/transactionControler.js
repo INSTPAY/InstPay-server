@@ -53,7 +53,7 @@ exports.transactions = async (req, res) => {
 
     var byDate = newtrans.slice(0);
     byDate.sort(function (a, b) {
-      return b.createdAt - a.createdAt;
+      return a.createdAt - b.createdAt;
     });
 
     if (byDate) res.status(200).json(byDate);
