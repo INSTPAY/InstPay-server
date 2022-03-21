@@ -4,19 +4,21 @@ const User = require('../models/userModel');
 
 exports.emailVerify = async (req, res) => {
   const { email } = req.body;
-
+  var resUser;
   try {
-    const resUser = await User.findOne({ email: email });
-
-    if (resUser)
-      res.status(200).json({
-        message: 'Email Already Use in another account',
-        status: false,
-      });
+    resUser = await User.findOne({ email: email });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 
+  if (resUser) {
+    res.status(200).json({
+      message: 'Email Already Use in another account',
+      status: false,
+    });
+
+    return;
+  }
   const otp = Math.floor(100000 + Math.random() * 900000);
 
   const newOtp = new Otp({
