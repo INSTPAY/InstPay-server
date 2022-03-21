@@ -21,6 +21,7 @@ exports.emailVerify = async (req, res) => {
         '</h1></b><br><br><br>Thanks, Regards  <br>InstPay Team'
     );
 
+    console.log(mailRes);
     return mailRes;
   };
 
