@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const verify = require('../controlers/verifyControler');
 
-router.post('/email', (req, res) => {
+router.post('/email/sendotp', (req, res) => {
   verify.emailVerify(req, res);
 });
-router.post('/email/otp', (req, res) => {
+router.post('/email/verifyotp', (req, res) => {
   verify.emailVerifyByOtp(req, res);
 });
 

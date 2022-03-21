@@ -20,8 +20,6 @@ exports.emailVerify = async (req, res) => {
         newOtp.otp +
         '</h1></b><br><br><br>Thanks, Regards  <br>InstPay Team'
     );
-
-    console.log(mailRes);
     return mailRes;
   };
 
