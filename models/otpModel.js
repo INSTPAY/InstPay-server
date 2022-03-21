@@ -7,13 +7,13 @@ const otpSceama = mongoose.Schema(
     expireAt: {
       type: Date,
       default: Date.now(),
-      expires: 600,
+      expires: 300,
     },
   },
 
   { timestamps: true }
 );
 
-otpSceama.index({ expireAt: 1 }, { expireAfterSeconds: 5 });
+otpSceama.index({ expireAt: 1 }, { expireAfterSeconds: 300 });
 
 module.exports = mongoose.model('Otp', otpSceama);
