@@ -9,7 +9,10 @@ exports.emailVerify = async (req, res) => {
     const resUser = await User.findOne({ email: email });
 
     if (resUser)
-      res.status(200).json({ message: 'email already', status: false });
+      res.status(200).json({
+        message: 'Email Already Use in another account',
+        status: false,
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
